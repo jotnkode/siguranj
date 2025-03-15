@@ -1,4 +1,4 @@
-package io.jotnkode.siguranj.service;
+package io.jotnkode.siguranj.services;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -19,7 +19,10 @@ import java.sql.Ref;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
-
+/**
+The api handler service for the siguranj. Contains the web flux functional endpoints for
+user creation and authentication.
+*/
 @Service
 public class SiguranService {
     @Autowired
@@ -27,14 +30,25 @@ public class SiguranService {
     @Autowired
     private Authentication auth;
 
+    /**
+    * Handles the api request to create a new user. Returns http status 200 ok and empty body if successful.
+    * otherwise returns http status 500 internal server error.
+    * @param request
+    * @return {@link ServerResponse}
+    */
     public Mono<ServerResponse> addUser(ServerRequest request) {
         return request.bodyToMono(UserPayload.class).flatMap( data -> {
-            System.out.println(data.toString());
             mgmt.createNewUser(data);
             return ServerResponse.ok().build();
         });
     }
 
+    /**
+    * Handles the api request to authenticate a user. Returns http status 200 ok and a json body {@link AuthenticationTokenResponsePayload}.
+    * If the user can't be found or authentication failes it will return 404 and 401 respectivley.
+    * @param request
+    * @return {@link ServerResponse}
+    */
     public Mono<ServerResponse> authenticate(ServerRequest request) {
         return request.bodyToMono(AuthenticationPayload.class).flatMap( data -> {
             try {
@@ -47,5 +61,14 @@ public class SiguranService {
             }
 
         });
+    }
+
+    /**
+    * Heartbeat utility endpoint to remotely monitor if server is up and available.
+    * @param request
+    * @return {@link ServerResponse}
+    */
+    public Mono<ServerResponse> heartbeat(ServerRequest request) {
+        return ServerResponse.ok().build();
     }
 }

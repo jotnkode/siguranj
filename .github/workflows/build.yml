@@ -1,0 +1,26 @@
+name: Builds siguranj project
+
+on:
+  push:
+    branches:
+      - main
+      - fb-*
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: setup jdk
+        uses: actions/setup-java@v2
+        with:
+          java-version: 23
+          distribution: zulu
+      - name: build it...
+        run: ./gradlew clean build javadoc bootJar
+      - name: upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: siguran-app
+          path: '${{ github.workspace }}/target/*.jar'
