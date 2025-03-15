@@ -1,0 +1,20 @@
+name: Builds siguranj project
+
+on:
+  push:
+    branches:
+      - main
+      - fb-*
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: setup jdk
+        uses: actions/setup-java@v2
+        with:
+          java-version: 23
+      - name: build it...
+        run: ./gradlew clean build javadoc bootJar

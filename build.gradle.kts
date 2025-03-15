@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "io.jotnkode"
-version = "0.0.1-SNAPSHOT"
+version = "0.0.1-alpha"
 
 java {
 	toolchain {
@@ -28,7 +28,6 @@ dependencies {
 	implementation("org.hibernate.orm:hibernate-community-dialects")
 	implementation("org.bouncycastle:bcpkix-jdk18on:1.80")
 	implementation("io.github.nbaars:paseto4j-version4:2024.3")
-	implementation("org.apache.tuweni:tuweni-crypto:2.3.1")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("io.projectreactor:reactor-test")
@@ -38,4 +37,13 @@ dependencies {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+tasks {
+    bootRun {
+        jvmArgs(
+            "-Xms1024m",
+            "-Xmx1024m"
+        )
+    }
 }
